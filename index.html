@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="基于七类购车需求的本地选车匹配工具">
+  <title>择一辆｜购车需求匹配器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="返回首页">
+      <span class="brand-mark">择</span>
+      <span>择一辆</span>
+    </a>
+    <div class="header-actions">
+      <button class="catalog-link" id="catalogBtn">完整车型库 <strong id="catalogCount">—</strong></button>
+      <span class="local-badge"><i></i> 仅在你的浏览器中计算，不上传</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="intro" class="intro shell">
+      <div class="eyebrow">CAR MATCHER · 01</div>
+      <h1>先想清楚怎么用，<br><em>再决定买哪辆。</em></h1>
+      <p class="lead">把预算、出行、家人和真实偏好放进同一套标准。硬性条件先筛掉不合适的，再从剩下的车里找到与你最贴近的答案。</p>
+      <div class="intro-actions">
+        <button class="primary-btn" id="startBtn">开始匹配 <span>→</span></button>
+        <span class="time-note">约 3 分钟 · 5 个步骤</span>
+      </div>
+      <div class="method-grid">
+        <article><span>01</span><h3>硬性约束</h3><p>预算、能源、座位数先过滤</p></article>
+        <article><span>02</span><h3>真实场景</h3><p>通勤、长途、停车与装载</p></article>
+        <article><span>03</span><h3>价值权重</h3><p>安全、舒适、经济与驾驶</p></article>
+      </div>
+    </section>
+
+    <section id="matcher" class="matcher shell hidden" aria-live="polite">
+      <aside class="step-nav" aria-label="问卷进度">
+        <div class="progress-copy"><strong id="stepCurrent">01</strong><span>/ 05</span></div>
+        <div class="progress-track"><i id="progressBar"></i></div>
+        <ol id="stepList">
+          <li class="active"><button data-step="0"><b>01</b><span>预算与牌照</span></button></li>
+          <li><button data-step="1"><b>02</b><span>能源与补能</span></button></li>
+          <li><button data-step="2"><b>03</b><span>日常与远行</span></button></li>
+          <li><button data-step="3"><b>04</b><span>家人与空间</span></button></li>
+          <li><button data-step="4"><b>05</b><span>偏好与配置</span></button></li>
+        </ol>
+      </aside>
+
+      <form id="matchForm" class="question-card" novalidate>
+        <section class="form-step active" data-step="0">
+          <div class="step-kicker">第一步 · 硬性约束</div>
+          <h2>先划定不能越过的边界</h2>
+          <p class="step-desc">预算与当地政策属于优先级最高的条件。</p>
+
+          <div class="field-block">
+            <label for="city">主要上牌城市</label>
+            <select id="city" name="city">
+              <option value="other">其他城市</option><option value="beijing">北京</option><option value="shanghai">上海</option>
+              <option value="guangzhou">广州</option><option value="shenzhen">深圳</option><option value="hangzhou">杭州</option>
+              <option value="tianjin">天津</option><option value="hainan">海南</option>
+            </select>
+            <p class="field-hint" id="plateHint">多数城市新能源车上牌更便利，最终以当地最新政策为准。</p>
+          </div>
+
+          <div class="field-block budget-block">
+            <div class="label-line"><label for="budget">裸车预算上限</label><output id="budgetOutput">20 万元</output></div>
+            <input id="budget" name="budget" type="range" min="6" max="50" step="1" value="20">
+            <div class="range-labels"><span>6 万</span><span>50 万</span></div>
+          </div>
+
+          <div class="field-block">
+            <label for="monthlySurplus">每月稳定可支配结余（扣除储蓄和风险缓冲后）</label>
+            <div class="input-suffix"><input id="monthlySurplus" name="monthlySurplus" type="number" min="0" max="50000" step="500" value="5000"><span>元 / 月</span></div>
+            <p class="field-hint" id="costHint">按燃油车年行驶 1 万公里保守估算，20 万级车型每月基础用车成本约 1,700～2,300 元，不含月供。</p>
+          </div>
+        </section>
+
+        <section class="form-step" data-step="1">
+          <div class="step-kicker">第二步 · 能源形式</div>
+          <h2>哪些能源形式你愿意接受？</h2>
+          <p class="step-desc">可多选。未选中的能源会作为硬性条件直接排除。</p>
+
+          <div class="choice-grid energy-grid">
+            <label class="choice-card"><input type="checkbox" name="energy" value="fuel" checked><span class="choice-icon">燃</span><b>燃油</b><small>补能快，长途从容</small></label>
+            <label class="choice-card"><input type="checkbox" name="energy" value="hev" checked><span class="choice-icon">混</span><b>油电混动</b><small>不充电也省油</small></label>
+            <label class="choice-card"><input type="checkbox" name="energy" value="phev" checked><span class="choice-icon">插</span><b>插电混动</b><small>市区用电，长途用油</small></label>
+            <label class="choice-card"><input type="checkbox" name="energy" value="erev" checked><span class="choice-icon">增</span><b>增程</b><small>电感体验，无里程焦虑</small></label>
+            <label class="choice-card"><input type="checkbox" name="energy" value="ev" checked><span class="choice-icon">电</span><b>纯电</b><small>安静、灵活、能耗低</small></label>
+          </div>
+
+          <fieldset class="field-block segmented-wrap">
+            <legend>固定车位与充电条件</legend>
+            <div class="segmented three">
+              <label><input type="radio" name="charging" value="home" checked><span>有家充</span></label>
+              <label><input type="radio" name="charging" value="public"><span>公共充电方便</span></label>
+              <label><input type="radio" name="charging" value="hard"><span>充电不方便</span></label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="form-step" data-step="2">
+          <div class="step-kicker">第三步 · 日常使用与出行半径</div>
+          <h2>这辆车大多数时候怎么开？</h2>
+          <p class="step-desc">用最高频的生活，而不是一年两次的例外来选车。</p>
+
+          <div class="field-block">
+            <label for="commute">单程通勤距离</label>
+            <select id="commute" name="commute"><option value="5">5 km 以内</option><option value="10" selected>5～10 km</option><option value="30">10～30 km</option><option value="50">30 km 以上</option></select>
+          </div>
+          <div class="field-block">
+            <span class="field-label">常见道路与场景（可多选）</span>
+            <div class="pill-grid">
+              <label><input type="checkbox" name="scene" value="city" checked><span>城市道路为主</span></label>
+              <label><input type="checkbox" name="scene" value="highway"><span>高速占比高</span></label>
+              <label><input type="checkbox" name="scene" value="congestion"><span>早晚高峰拥堵</span></label>
+              <label><input type="checkbox" name="scene" value="weather"><span>多雨 / 多雪 / 多雾</span></label>
+              <label><input type="checkbox" name="scene" value="rough"><span>山区 / 非铺装路</span></label>
+              <label><input type="checkbox" name="scene" value="tight"><span>窄车位 / 老小区</span></label>
+            </div>
+          </div>
+          <fieldset class="field-block segmented-wrap">
+            <legend>长途频率</legend>
+            <div class="segmented three">
+              <label><input type="radio" name="trip" value="rare"><span>很少长途</span></label>
+              <label><input type="radio" name="trip" value="sometimes" checked><span>偶尔 100～300 km</span></label>
+              <label><input type="radio" name="trip" value="often"><span>经常 500 km+</span></label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="form-step" data-step="3">
+          <div class="step-kicker">第四步 · 乘员与装载</div>
+          <h2>平时拉谁，又要装什么？</h2>
+          <p class="step-desc">家庭成员与装载需求会直接改变空间和车身形式的答案。</p>
+
+          <fieldset class="field-block segmented-wrap">
+            <legend>经常同时乘坐的人数</legend>
+            <div class="segmented four">
+              <label><input type="radio" name="passengers" value="2" checked><span>1～2 人</span></label>
+              <label><input type="radio" name="passengers" value="4"><span>3～4 人</span></label>
+              <label><input type="radio" name="passengers" value="5"><span>经常满载 5 人</span></label>
+              <label><input type="radio" name="passengers" value="6"><span>6 人以上</span></label>
+            </div>
+          </fieldset>
+          <div class="field-block">
+            <span class="field-label">家庭与装载情况（可多选）</span>
+            <div class="toggle-list">
+              <label><span><b>儿童出行</b><small>安全座椅、婴儿车与儿童锁</small></span><input type="checkbox" name="family" value="child"><i></i></label>
+              <label><span><b>父母 / 长辈常坐</b><small>上下车便利与后排腿部空间</small></span><input type="checkbox" name="family" value="elder"><i></i></label>
+              <label><span><b>后备箱高频使用</b><small>每周采购、宠物或日常装备</small></span><input type="checkbox" name="family" value="cargo"><i></i></label>
+              <label><span><b>露营 / 骑行 / 大件</b><small>大开口、规整空间与座椅放倒</small></span><input type="checkbox" name="family" value="largeCargo"><i></i></label>
+            </div>
+          </div>
+          <fieldset class="field-block segmented-wrap">
+            <legend>更偏好的车身形式</legend>
+            <div class="segmented four">
+              <label><input type="radio" name="body" value="any" checked><span>都可以</span></label>
+              <label><input type="radio" name="body" value="sedan"><span>轿车 / 两厢</span></label>
+              <label><input type="radio" name="body" value="suv"><span>SUV</span></label>
+              <label><input type="radio" name="body" value="mpv"><span>MPV</span></label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="form-step" data-step="4">
+          <div class="step-kicker">第五步 · 价值取向</div>
+          <h2>什么让一辆车真正适合你？</h2>
+          <p class="step-desc">拖动权重。分数越高，这项越能影响最终排序。</p>
+
+          <div class="priority-list">
+            <label><span><b>安全</b><small>被动安全与主动预防</small></span><input type="range" name="safety" min="1" max="5" value="5"><output>5</output></label>
+            <label><span><b>舒适</b><small>座椅、空间与静谧性</small></span><input type="range" name="comfort" min="1" max="5" value="4"><output>4</output></label>
+            <label><span><b>经济</b><small>能耗、保养与持有成本</small></span><input type="range" name="economy" min="1" max="5" value="4"><output>4</output></label>
+            <label><span><b>驾驶</b><small>动力、转向与底盘反馈</small></span><input type="range" name="driving" min="1" max="5" value="3"><output>3</output></label>
+            <label><span><b>智能</b><small>车机、辅助驾驶与互联</small></span><input type="range" name="smart" min="1" max="5" value="3"><output>3</output></label>
+            <label><span><b>设计</b><small>外观、内饰与品牌调性</small></span><input type="range" name="design" min="1" max="5" value="3"><output>3</output></label>
+          </div>
+
+          <div class="field-block">
+            <span class="field-label">希望具备的配置（作为加分项）</span>
+            <div class="pill-grid">
+              <label><input type="checkbox" name="feature" value="l2"><span>高速辅助驾驶</span></label>
+              <label><input type="checkbox" name="feature" value="camera360"><span>360° 全景影像</span></label>
+              <label><input type="checkbox" name="feature" value="ventilation"><span>座椅通风 / 加热</span></label>
+              <label><input type="checkbox" name="feature" value="phone"><span>手机互联</span></label>
+              <label><input type="checkbox" name="feature" value="awd"><span>四驱</span></label>
+            </div>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="text-btn" id="prevBtn">← 上一步</button>
+          <button type="button" class="primary-btn" id="nextBtn">下一步 <span>→</span></button>
+          <button type="submit" class="primary-btn hidden" id="submitBtn">查看匹配结果 <span>↗</span></button>
+        </div>
+        <p class="form-error" id="formError" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="results" class="results shell hidden" aria-live="polite">
+      <div class="results-head">
+        <div><div class="eyebrow">YOUR MATCH · 结果</div><h2>更适合你的，不止一辆。</h2><p>这是按硬性条件过滤、再按生活场景与偏好加权的结果。</p></div>
+        <button id="restartBtn" class="outline-btn">重新填写</button>
+      </div>
+      <div id="summaryStrip" class="summary-strip"></div>
+      <div id="bestMatch"></div>
+      <div class="alternatives-head"><h3>其他高匹配选择</h3><span>不同取舍，同样合理</span></div>
+      <div id="alternatives" class="alternative-grid"></div>
+      <div class="decision-note">
+        <div class="note-number">!</div>
+        <div><h3>把结果当成试驾清单，而不是购买结论</h3><p>车型库使用静态参考价格与代表性配置，不能代替当地最新售价、具体配置、牌照政策和实际试驾。下一步请核对官方配置，并用同一路线试驾前 3 名。</p></div>
+      </div>
+    </section>
+
+    <section id="catalog" class="catalog shell hidden" aria-live="polite">
+      <div class="catalog-head">
+        <div><div class="eyebrow">PUBLIC CATALOG · 公开目录</div><h2>完整车型库</h2><p id="catalogMeta">正在读取公开车型目录…</p></div>
+        <button id="closeCatalogBtn" class="outline-btn">返回选车</button>
+      </div>
+      <div class="catalog-tools">
+        <label class="catalog-search"><span>搜索车型、品牌或厂商</span><input id="catalogSearch" type="search" placeholder="例如：Model Y、比亚迪、一汽大众"></label>
+        <label><span>品牌</span><select id="catalogBrand"><option value="">全部品牌</option></select></label>
+        <label><span>价格上限</span><select id="catalogBudget"><option value="">不限价格</option><option value="10">10 万以内</option><option value="15">15 万以内</option><option value="20">20 万以内</option><option value="30">30 万以内</option><option value="50">50 万以内</option><option value="100">100 万以内</option></select></label>
+      </div>
+      <div class="catalog-summary"><strong id="catalogResultCount">0</strong><span>个车系符合条件</span></div>
+      <div id="catalogGrid" class="catalog-grid"></div>
+      <button id="catalogMoreBtn" class="catalog-more hidden">显示更多</button>
+      <div class="catalog-source">
+        <p><b>收录范围：</b>公开 A–Z 车型索引中有当前指导价、且未标记为灰色历史链接的车系。这里的“完整”指该公开索引在更新时间列出的范围，不包含未上市、停售、平行进口、区域限定或来源尚未收录的车辆。</p>
+        <p>只保存车系名称、品牌、厂商、公开指导价和原始链接，不复制图片、文章、口碑或用户数据。价格与在售状态请以车企官方最新信息为准。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>方法参考《所长 Wy · 购车指南参考图表》</span><span>车型名称与指导价来源：<a href="https://www.autohome.com.cn/grade/carhtml/" target="_blank" rel="noopener">汽车之家公开车型索引</a> · 非商业推荐</span></footer>
+  <script src="models.generated.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
